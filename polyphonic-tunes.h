@@ -10,10 +10,6 @@
 
 #include "stm32h7xx_hal.h"
 
-#define DIFF 1
-#define CHA 2
-#define CHB 3
-
 #define SINE     0
 #define TRIANGLE 1
 #define SQUARE   2
@@ -29,7 +25,18 @@
 #define FS 20000.0                                              //-Sample rate (NOTE: must match tables.h)
 
 
-
+void audio_synthesis();
+void begin();
+void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
+void setWave(uint8_t voice, uint8_t wave);
+void setPitch(uint8_t voice, uint8_t MIDInote);
+void setEnvelope(uint8_t voice, uint8_t env);
+void setLength(uint8_t voice, uint8_t length);
+void setMod(uint8_t voice, uint16_t mod);
+void mTrigger(uint8_t voice, uint8_t MIDInote);
+void setFrequency(uint8_t voice, float f);
+void setTime(uint8_t voice, float t);
+void trigger(uint8_t voice);
 
 
 #endif /* INC_POLYPHONIC_TUNES_H_ */
