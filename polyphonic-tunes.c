@@ -28,10 +28,14 @@ volatile uint16_t  tim = 0;
 volatile uint8_t tik = 0;
 volatile uint8_t output_mode;
 
+void (*output_func)(uint16_t) = NULL;
 
+TIM_HandleTypeDef* tim_control;
 
-TIM_HandleTypeDef tim_control;
-TIM_HandleTypeDef tim_audio_out;
+TIM_HandleTypeDef* tim_audio_out = NULL;
+uint8_t output_channel;
+
+double timer_bus_freq;
 
 //*********************************************************************************************
 //  Audio driver interrupt
@@ -72,6 +76,8 @@ void audio_synthesis() {
 
 	synthesized_output *= (float)(1<<16-1)/(1<<8-1);
 
+	output_func(synthesized_output);
+
 	//************************************************
 	//  Modulation engine
 	//************************************************
@@ -87,67 +93,43 @@ __weak void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
 }
 
 
-
-
-void begin()
-{
-	output_mode=CHA;
-	TCCR1A = 0x00;                                  //-Start audio interrupt
-	TCCR1B = 0x09;
-	TCCR1C = 0x00;
-	OCR1A=16000000.0 / FS;			    //-Auto sample rate
-	SET(TIMSK1, OCIE1A);                            //-Start audio interrupt
-	sei();                                          //-+
-
-	TCCR2A = 0x83;                                  //-8 bit audio PWM
-	TCCR2B = 0x01;                                  // |
-	OCR2A = 127;                                    //-+
-	SET(DDRB, 3);				    //-PWM pin
-}
-
-//*********************************************************************
-//  Startup fancy selecting varoius output modes
-//*********************************************************************
-
-void begin(uint8_t d)
-{
-	TCCR1A = 0x00;                                  //-Start audio interrupt
-	TCCR1B = 0x09;
-	TCCR1C = 0x00;
-	OCR1A=16000000.0 / FS;			    //-Auto sample rate
-	SET(TIMSK1, OCIE1A);                            //-Start audio interrupt
-	sei();                                          //-+
-
-	output_mode=d;
-
-	switch(d)
-	{
-	case DIFF:                                        //-Differntial signal on CHA and CHB pins (11,3)
-	  TCCR2A = 0xB3;                                  //-8 bit audio PWM
-	  TCCR2B = 0x01;                                  // |
-	  OCR2A = OCR2B = 127;                            //-+
-	  SET(DDRB, 3);				      //-PWM pin
-	  SET(DDRD, 3);				      //-PWM pin
-	  break;
-
-	case CHB:                                         //-Single ended signal on CHB pin (3)
-	  TCCR2A = 0x23;                                  //-8 bit audio PWM
-	  TCCR2B = 0x01;                                  // |
-	  OCR2A = OCR2B = 127;                            //-+
-	  SET(DDRD, 3);				      //-PWM pin
-	  break;
-
-	case CHA:
-	default:
-	  output_mode=CHA;                                //-Single ended signal in CHA pin (11)
-	  TCCR2A = 0x83;                                  //-8 bit audio PWM
-	  TCCR2B = 0x01;                                  // |
-	  OCR2A = OCR2B = 127;                            //-+
-	  SET(DDRB, 3);				      //-PWM pin
-	  break;
-
+void timer_output_handler(uint16_t output) {
+	switch (output_channel) {
+		case 1:
+			tim_audio_out->Instance->CCR1 = synthesized_output;
+			break;
+		case 2:
+			tim_audio_out->Instance->CCR2 = synthesized_output;
+			break;
+		case 3:
+			tim_audio_out->Instance->CCR3 = synthesized_output;
+			break;
+		case 4:
+			tim_audio_out->Instance->CCR4 = synthesized_output;
+			break;
+		default:
+			break;
 	}
 }
+
+
+void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim, TIM_HandleTypeDef* output_tim, uint8_t out_channel, void (*output_handler)(uint16_t))
+{
+	timer_bus_freq = timer_frequency;
+
+	tim_control = ctrl_tim;
+
+	tim_audio_out = output_tim;
+	output_channel = out_channel;
+
+	if (output_handler != NULL)
+		output_func = output_handler;
+	else
+		output_func = timer_output_handler;
+
+}
+
+
 
 //*********************************************************************
 //  Timing/sequencing functions
@@ -219,7 +201,7 @@ void setWave(uint8_t voice, uint8_t wave)
 
 void setPitch(uint8_t voice, uint8_t MIDInote)
 {
-	PITCH[voice]=&PITCHS[MIDInote];
+	PITCH[voice]=PITCHS[MIDInote];
 }
 
 //*********************************************************************
@@ -284,7 +266,7 @@ void mTrigger(uint8_t voice, uint8_t MIDInote)
 
 void setFrequency(uint8_t voice, float f)
 {
-	PITCH[voice]=f/(FS/65535.0);
+	PITCH[voice]=f/(timer_bus_freq/65535.0);
 }
 
 //*********************************************************************
@@ -293,7 +275,7 @@ void setFrequency(uint8_t voice, float f)
 
 void setTime(uint8_t voice, float t)
 {
-	EFTW[voice]=(1.0/t)/(FS/(32767.5*10.0));//[s];
+	EFTW[voice]=(1.0/t)/(timer_bus_freq/(32767.5*10.0));//[s];
 }
 
 //*********************************************************************
@@ -313,11 +295,14 @@ void trigger(uint8_t voice)
 
 void suspend()
 {
-	CLR(TIMSK1, OCIE1A);                            //-Stop audio interrupt
+
+	HAL_TIM_Base_Stop(tim_control);
+	HAL_TIM_Base_Stop_IT(tim_control);
 }
 void resume()
 {
-	SET(TIMSK1, OCIE1A);                            //-Start audio interrupt
+	HAL_TIM_Base_Start(tim_control);
+	HAL_TIM_Base_Start_IT(tim_control);                           //-Start audio interrupt
 }
 
 

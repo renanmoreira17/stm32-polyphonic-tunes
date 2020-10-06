@@ -26,7 +26,7 @@
 
 
 void audio_synthesis();
-void begin();
+void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim, TIM_HandleTypeDef* output_tim, uint8_t out_channel, void (*output_handler)(uint16_t));
 void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
 void setWave(uint8_t voice, uint8_t wave);
 void setPitch(uint8_t voice, uint8_t MIDInote);
