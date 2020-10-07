@@ -9,6 +9,7 @@
 #define INC_POLYPHONIC_TUNES_H_
 
 #include "stm32h7xx_hal.h"
+#include "stdint.h"
 
 #define SINE     0
 #define TRIANGLE 1
@@ -26,7 +27,7 @@
 
 
 void audio_synthesis();
-void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim, TIM_HandleTypeDef* output_tim, uint8_t out_channel, void (*output_handler)(uint16_t));
+void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim, TIM_HandleTypeDef* output_tim, uint8_t out_channel, void (*output_handler)(uint32_t));
 void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
 void setWave(uint8_t voice, uint8_t wave);
 void setPitch(uint8_t voice, uint8_t MIDInote);

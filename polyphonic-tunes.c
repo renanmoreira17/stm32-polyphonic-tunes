@@ -6,8 +6,8 @@
  */
 
 
-#include <polyphonic-tunes.h>
-#include <polyphonic-tunes-tables.h>
+#include "polyphonic-tunes.h"
+#include "polyphonic-tunes-tables.h"
 
 #define SET(x,y) (x |=(1<<y))		        		//-Bit set/clear macros
 #define CLR(x,y) (x &= (~(1<<y)))       			// |
@@ -55,9 +55,9 @@ void audio_synthesis() {
 	// Volume envelope generator
 	//-------------------------------
 
-	if (EPCW[divider]&0xFF00 < 0x80) {
+	if ((EPCW[divider]&0xFF00) < 0x8000) {
 		EPCW[divider]+=EFTW[divider];
-		AMP[divider] = envs[divider][EPCW[divider]&0xFF00];
+		AMP[divider] = envs[divider][(EPCW[divider]&0xFF00)>>8];
 	} else {
 		AMP[divider] = 0;
 	}
@@ -65,16 +65,16 @@ void audio_synthesis() {
 	//-------------------------------
 	//  Synthesizer/audio mixer
 	//-------------------------------
-	uint16_t synthesized_output = (1<<7)-1; //half of an int16 max value
+	uint32_t synthesized_output = 0; //half of an int16 max value
 
 	for(int i = 0; i < 4; i++) {
 		PCW[i]+=FTW[i];
-		synthesized_output += wavs[i][PCW[i]&0xFF00]*AMP[i];
+		synthesized_output += ( wavs[i][(PCW[i]&0xFFC0)>>6]*AMP[i])>>8;
 	}
 
-	synthesized_output = (synthesized_output<<10);
+	synthesized_output = (synthesized_output>>8);
 
-	synthesized_output *= (float)(1<<16-1)/(1<<8-1);
+//	synthesized_output = (synthesized_output<<2);
 
 	output_func(synthesized_output);
 
@@ -86,26 +86,22 @@ void audio_synthesis() {
 	tim++;
 }
 
-__weak void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-	if (htim != &tim_control) return; 		// guard statement. exits the interrupt was not originated from the control timer
-
-	audio_synthesis();
-}
 
 
-void timer_output_handler(uint16_t output) {
+
+void timer_output_handler(uint32_t output) {
 	switch (output_channel) {
 		case 1:
-			tim_audio_out->Instance->CCR1 = synthesized_output;
+			tim_audio_out->Instance->CCR1 = output;
 			break;
 		case 2:
-			tim_audio_out->Instance->CCR2 = synthesized_output;
+			tim_audio_out->Instance->CCR2 = output;
 			break;
 		case 3:
-			tim_audio_out->Instance->CCR3 = synthesized_output;
+			tim_audio_out->Instance->CCR3 = output;
 			break;
 		case 4:
-			tim_audio_out->Instance->CCR4 = synthesized_output;
+			tim_audio_out->Instance->CCR4 = output;
 			break;
 		default:
 			break;
@@ -113,7 +109,7 @@ void timer_output_handler(uint16_t output) {
 }
 
 
-void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim, TIM_HandleTypeDef* output_tim, uint8_t out_channel, void (*output_handler)(uint16_t))
+void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim, TIM_HandleTypeDef* output_tim, uint8_t out_channel, void (*output_handler)(uint32_t))
 {
 	timer_bus_freq = timer_frequency;
 
