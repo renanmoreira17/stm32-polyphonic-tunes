@@ -6,7 +6,7 @@
  */
 
 
-#include "polyphonic-tunes.h"
+#include "polyphonic_tunes.h"
 #include "polyphonic-tunes-tables.h"
 
 #define SET(x,y) (x |=(1<<y))		        		//-Bit set/clear macros
