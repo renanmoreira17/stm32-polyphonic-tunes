@@ -199,7 +199,7 @@ IV) Just play and have fun. Use the play_song() to start playing. Use stop_song(
 
 You can use other functions to set/get the status of the song.
 
-- void clear_song(music musica);
+- void clear_song();
 
 - void play_song();
 
