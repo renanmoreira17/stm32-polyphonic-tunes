@@ -217,6 +217,7 @@ const char* viola =
 4p,4c#,8d,8p,8f#,8p,\
 8b-1,8p,8g-1,8p,8e-1,8p,8e,8p,\
 8e,8d,4p,2p,\
+8d,8d,8e,8e,8f#,8f#,8d,8d,\
 8c#,8c#,8d,8d,8e,8e,8c#,8c#,\
 8d,8d,8e,8e,8f#,8f#,8d,8d,\
 8c#,8c#,8d,8d,8e,8e,8c#,8c#,\
