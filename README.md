@@ -205,28 +205,15 @@ But you have to set the function in **bold**.
 - void trigger(uint8_t voice);
 
 
-III) To set the 
+III) Set the voices
 
-void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
+- void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
 
+IV) Join the voices with synthesis
 
+- void audio_synthesis();
 
-void audio_synthesis();
-void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim);
-void setup_synth_custom_output_handler(void (*output_handler)(uint32_t));
-void setup_synth_pwm_output_handler(TIM_HandleTypeDef* output_tim, uint8_t out_channel);
-void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
-void setWave(uint8_t voice, uint8_t wave);
-void setPitch(uint8_t voice, uint8_t MIDInote);
-void setEnvelope(uint8_t voice, uint8_t env);
-void setLength(uint8_t voice, uint8_t length);
-void setMod(uint8_t voice, uint16_t mod);
-void mTrigger(uint8_t voice, uint8_t MIDInote);
-void setFrequency(uint8_t voice, float f);
-void setTime(uint8_t voice, float t);
-void trigger(uint8_t voice);
-
-void pause(uint8_t voice);
-
-void synth_suspend();
-void synth_resume();
+You can modifed the status with:
+- void pause(uint8_t voice);
+- void synth_suspend();
+- void synth_resume();
