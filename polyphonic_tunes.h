@@ -42,7 +42,7 @@ void setPitch(uint8_t voice, uint8_t MIDInote);
 void setEnvelope(uint8_t voice, uint8_t env);
 //Set length for individual voice
 void setLength(uint8_t voice, uint8_t length);
-//Set modulation for individual voice
+//Set modulation for individual voice. Higher values mean higher pitch modulation to the voice. to zero out, use 64
 void setMod(uint8_t voice, uint16_t mod);
 //Trigger a midi note for individual voice
 void mTrigger(uint8_t voice, uint8_t MIDInote);
