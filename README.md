@@ -3,9 +3,13 @@
 #### *Esta API foi desenvolvida como trabalho da disciplina de Programação de Sistemas Embarcados da UFMG*
 #### *- Prof. Ricardo de Oliveira Duarte – Departamento de Engenharia Eletrônica*
 
+## Check out this library playing Mozart's Eine kleine Nachtmusik in 4 voices on Youtube:
+[![Check out this library playing Mozart's Eine kleine Nachtmusik in 4 voices](https://img.youtube.com/vi/dU88jI1gyLE/0.jpg)](https://www.youtube.com/watch?v=dU88jI1gyLE)
+
+
 # Important!
 
-This library is importing the HAL library from stm32H7xx, you should change it to match your stm model. Access the library source files and change it. 
+This library uses the HAL library from stm32H7xx, you should change it to match your stm model. Access the library's source files and change it. 
 
 ## Hardware connections
 
@@ -23,7 +27,7 @@ This library is importing the HAL library from stm32H7xx, you should change it t
 
 ## How to write song: 
 
-You may be wondering how one can write songs for the stm32 without any knowledge of Music! Its actually quite interesting and fun. First you need to know the value of the notes in Music. 
+You may be wondering how one can write songs for the stm32 without any knowledge of Music! It's actually quite interesting and fun. First you need to know the value of the notes in Music. 
 
 ![alt text](https://lh3.googleusercontent.com/proxy/14r8O6HwR5brg3J6wkm-n_To6zeHLZB4NYLGDut-vAvWiy9ThKSZgXc-cgZFelgwnJNpaGx0N3o3rPfhI0D5kC5FCgTrcOc8eOZOWPJ59f1bdCLnIw-_emWDQtB4gDhNRk1SF9ryGhKeUAoqk-2c6U_PdYc)
 
@@ -79,9 +83,9 @@ You can change the NR_PERC definition inside song_engine.h in order to redistrib
 
 - There are only 7 possible letters. a,b,c,d,e,f,g
 - A rest uses the letter p
-- To name a letter a flat put an underscore _ right after the letter
+- To use a flat note put an underscore _ right after the letter
   - ex: b_
-- To name a letter a sharp put a hashtag # right after the letter
+- To use a sharp note put a hashtag # right after the letter
   - ex: c#
 - To raise a note up an octave, put the number of octaves to be raised after the Sharp/Flats/Letter
   - ex: b1
@@ -101,26 +105,26 @@ You can change the NR_PERC definition inside song_engine.h in order to redistrib
 
 - song.nota_ref = 4 // quarter_note
 
-- song.voice = "8c,8d,8e,8f,8g,8a,8b,8c1"; // eighth note c-scale
+- song.voice[0] = "8c,8d,8e,8f,8g,8a,8b,8c1"; // eighth note c-scale
 
 
 ##### You must not :
 
 - Use spaces
-- Use diferents caracters 
+- Use any different characters than the fore mentioned 
 
 ## How to read a note
 
-To read the note you just have to know the control variables, and note_uptade gives it. Before using the note update, it is important to initialize the position field with null values.
+To read the next note from the string you just have to use note_update. It stores the next note and duration inside the _music_ structure, on the _control_ member. 
 
 **uint8_t note_update(music *song, uint8_t instrument)**
 instrument represent the voice of the score. Usually in classical music, they have several instruments in which each represents a voice.
 
-The function will uptade duration, position, note and will return 1 when the string have more notes to read. If not, return 0. The function return it to other the programmer know when the song is over.
+The function will uptade duration, position, note and will return 1 when the string have more notes to read. If not, return 0. The return value is meant for the programmer to know when the song is over.
 
 example of an internal use:
 
-uint8_t violine_I; 
+uint8_t violine_I = 0; 
 
 note_update(&song, violine_I);
 
@@ -132,9 +136,9 @@ note_update(&song, violine_I);
 
 ## How to produce sound
 
-The library polyphonic_tunes make it! 
+The library polyphonic_tunes does it! 
 
-First you have to understand how the code produce play diferent notes at the same time.
+First you have to understand how the code plays diferent notes at the same time.
 Basicly it sums diferrent sin waves at the same time.
 Read the article: https://www.gamry.com/application-notes/EIS/waveform-generation-and-frequency-resolution/
 
@@ -145,7 +149,7 @@ Read the article: https://www.gamry.com/application-notes/EIS/waveform-generatio
 - **FTW (Frequency Tuning Word)**: parameter that the code uses to synthesize the frequency note.
 *Note that in the PITCHS table has the notes from c-2 to c8. Start in c-2 and goes one tone up until c8, so PITCHS[0] represent the FTW of c in octave -2.
 
-- **Get better**: use a RC filter to get cleanner sound! It's explained in the beginning how to do so.
+- **Improve further**: use a RC filter to get cleanner sound! It's explained in the beginning how to do so.
 
 ### How to use song_egine:
 
@@ -166,7 +170,7 @@ I) You have to initialize the timer interruption (initialize_song_engine and son
 #### Timer and PWM configuration:
 
 
-- **Your timer input frequency must has 20kHz**
+- **Your timer input frequency must be 20kHz**
 
 - **Put PWM in the max frequency possible and put the resolution to 2^11 bits** 
 
