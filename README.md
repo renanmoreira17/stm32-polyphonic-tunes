@@ -38,8 +38,8 @@ Formed by 5 parameters: octave, bpm, control, voices and nota ref.
 ##### The octave, the bpm and the ref note are fixed parameters of the music.
 
 **octave**: octave reference. Usually the reference is the middle C (C4). 
-*By default, notes are associated with the first octave: c0.*
-**Formula: note = note + 12*octave**
+*By default, notes are associated with the first octave: c1.*
+**Formula: note = note + 12*(octave-1)**
 
 **bpm**: beats per minute - the tempo of the song. 
 **ref note**: the note ()
@@ -49,13 +49,14 @@ Formed by 5 parameters: octave, bpm, control, voices and nota ref.
 
 The control of the voice string is done through 5 parameters of the struct song_ctrl.
 
-**note**: contains the FTW table index corresponding to the note.
-**duration**: contains the time the note will be played based on the following equation.
-**position**: the index of the string related to note and tempo.
+**note**: contains the FTW (Frequency Tuning Word) table index corresponding to the note.
+**duration**: contains the time the note will be played based on the to be presented equation.
+**position**: the index of the string related to note and tempo. That's the engine reference on the current position of the song.
 
 **pause_ticks**: number of clock pulses which the note is not played.   }
 **remaining_ticks**: number of clock pulses which the note is played.   } The sum of the two parameters is the total note time
 
+You can change the NR_PERC definition inside song_engine.h in order to redistribute the ration between playing and pausing within a note. The higher the value, the more the notes sound separated.
 
 **Voice and control has voice reference indicators. It is extremely important to use the same indices for the same voices.**
 - example to reference the same voice:
@@ -98,9 +99,9 @@ The control of the voice string is done through 5 parameters of the struct song_
 
 - song.bpm = 100; 
 
-- song.ref_note = 4 // quarter_note
+- song.nota_ref = 4 // quarter_note
 
-- song.voice = "8c,8d,8e,8f,8g,8a,8b,8c1"; // c-scale
+- song.voice = "8c,8d,8e,8f,8g,8a,8b,8c1"; // eighth note c-scale
 
 
 ##### You must not :
@@ -115,7 +116,7 @@ To read the note you just have to know the control variables, and note_uptade gi
 **uint8_t note_update(music *song, uint8_t instrument)**
 instrument represent the voice of the score. Usually in classical music, they have several instruments in which each represents a voice.
 
-The function will uptade duration, position, note and will return 1 when the string have more notes to read. If not, return 0. The function return it to other the programmer know when the music it is over.
+The function will uptade duration, position, note and will return 1 when the string have more notes to read. If not, return 0. The function return it to other the programmer know when the song is over.
 
 example of an internal use:
 
@@ -138,26 +139,28 @@ Basicly it sums diferrent sin waves at the same time.
 Read the article: https://www.gamry.com/application-notes/EIS/waveform-generation-and-frequency-resolution/
 
 ### Note:
-- **Sine discretization**: take one period sine wave - 2pi - and divide in 2^11 bits to get 2048 samples.
-*Note that is the SinTable in the polyphonic_tunes_tables.h
+- **Sine discretization**: take one period sine wave - 2pi - and divide in 2^10 bits to get 1024 samples.
+*Note that is the SinTable in the polyphonic_tunes_tables.h. There's also a triangle table if you'd like that
 
-- **FTW (Frequency Tuning Word)**: parameter that the code uses to get the frequency note.
+- **FTW (Frequency Tuning Word)**: parameter that the code uses to synthesize the frequency note.
 *Note that in the PITCHS table has the notes from c-2 to c8. Start in c-2 and goes one tone up until c8, so PITCHS[0] represent the FTW of c in octave -2.
 
-- **Get better**: use a RC filter to get cleanner sound!
+- **Get better**: use a RC filter to get cleanner sound! It's explained in the beginning how to do so.
 
 ### How to use song_egine:
 
 This is the library that you will use, it cointains the functions to control music.
 
+# NOTE
+The first thing you should do is setup a timer from your stm to 20kHz. You should also enable global interrupts from this timer. The formula to know the timer frequency based on its parameters is: Fout = Fbus/((Prescaler+1)\*(Period+1)). Where Fbus is the frequency of the bus the timer is connected. You should choose the Period and Prescaler values so that Fout equal 20kHz. You also must implement this timer's overflow interrupt, and call the library's function song_scheduler, passing the interrupt source timer as the parameter. **IT must be 20khz, otherwise you'll get distorted sound**.
+If you want to use the stm's PWM as output, you should also set a spare timer and configure one of its channel as PWM, preferably configured as fast PWM. 
+You can find an example inside the example folder.
 
 I) You have to initialize the timer interruption (initialize_song_engine and song_scheduler), to make use the library.
 
-- **ctrl_tim**: the timer that you will use.
+- **ctrl_tim**: the 20kHz timer that you will use.
 
-- **timer_freq**: timer frequency.
-
-- **htim**: interruption timer to know when a note ends - It is the same fo ctrl_tim.
+- **timer_freq**: timer bus frequency.
 
 
 #### Timer and PWM configuration:
@@ -182,12 +185,17 @@ II) After that, you can treat output with pwm or use a custom treatment output.
 
 
 III) Set the music struct parameters and load the song. 
-
+  - music musica;
+  - musica.bpm = 60;
+  - musica.nota_ref = QUARTER_NOTE;
+  - musica.oitava = 4;
+  - musica.voice[0] = <your_song_string>;.
+  - ...
   - void load_song(music musica);
 
 
 
-IV) Just play and have fun.
+IV) Just play and have fun. Use the play_song() to start playing. Use stop_song() to move the engine reference to the top, and play_song() again to replay it.
 
 You can use other functions to set/get the status of the song.
 
