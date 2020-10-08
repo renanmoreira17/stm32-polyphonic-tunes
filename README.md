@@ -51,28 +51,47 @@ music.voice[*0*]; music.control.note[*0*]; music.control.note[*0*];
  **Formula: 4/(note value)= duration. So an eight note would be 4/(1/2) = 8.**
 
 ##### Note:
+
 - There are only 7 possible letters. a,b,c,d,e,f,g
+
 - A rest uses the letter p
+
 - To name a letter a flat put an underscore _ right after the letter
+
 . ex: b_
+
 - To name a letter a sharp put a hashtag # right after the letter
+
 . ex: c#
+
 - To raise a note up an octave, put the number of octaves to be raised after the Sharp/Flats/Letter
+
 . ex: b1
+
 . ex2: c#1
+
 - To drop a note down an Octave, put a minus - sign and then the number of octaves to be dropped after the Sharp/Flats/Letter
+
 . ex: b-1
+
 . ex: c#-2
 
 #### Creating a Song:
 
+
 music song;
+
 song.octave = 4. // reference in middle c (c4)
+
 song.bpm = 100; 
+
 song.ref_note = 4 // quarter_note
+
 song.voice = "8c,8d,8e,8f,8g,8a,8b,8c1"; // c-scale
 
+
 ## How to read a note
+
 To read the note you just have to know the control variables, and note_uptade gives it. Before using the note update, it is important to initialize the position field with null values.
 
 **uint8_t note_update(music *song, uint8_t instrument)**
@@ -132,13 +151,14 @@ IV) Just play and have fun.
 You can use other functions to set/get the status of the song.
 
 *void clear_song(music musica);
-void play_song();
 
-void pause_song();
+*void play_song();
 
-void stop_song();
+*void pause_song();
 
-song_status get_song_status();
+*void stop_song();
+
+*song_status get_song_status();
 
 ### How to use polyphonic_tune:
 
