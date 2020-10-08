@@ -114,13 +114,13 @@ Basicly it sums diferrent sin waves at the same time.
 Read the article: https://www.gamry.com/application-notes/EIS/waveform-generation-and-frequency-resolution/
 
 ### Note:
-**Sine discretization**: take one period sine wave - 2pi - and divide in 2^11 bits to get 2048 samples.
+- **Sine discretization**: take one period sine wave - 2pi - and divide in 2^11 bits to get 2048 samples.
 *Note that is the SinTable in the polyphonic_tunes_tables.h
 
-**FTW (Frequency Tuning Word)**: parameter that the code uses to get the frequency note.
+- **FTW (Frequency Tuning Word)**: parameter that the code uses to get the frequency note.
 *Note that in the PITCHS table has the notes from c-2 to c8. Start in c-2 and goes one tone up until c8, so PITCHS[0] represent the FTW of c in octave -2.
 
-**Get better**: use a RC filter to get cleanner sound!
+- **Get better**: use a RC filter to get cleanner sound!
 
 ### How to use song_egine:
 
@@ -129,31 +129,29 @@ This is the library that you will use, it cointains the functions to control mus
 
 I) You have to initialize the timer interruption (initialize_song_engine and song_scheduler), to make use the library.
 
-**ctrl_tim**: the timer that you will use.
+- **ctrl_tim**: the timer that you will use.
 
-**timer_freq**: timer frequency.
+- **timer_freq**: timer frequency.
 
-**htim**: interruption timer to know when a note ends - It is the same fo ctrl_tim.
+- **htim**: interruption timer to know when a note ends - It is the same fo ctrl_tim.
 
 
 #### Timer and PWM configuration:
 
 
-**Your timer input frequency must has 20kHz**
+- **Your timer input frequency must has 20kHz**
 
-**Put PWM in the max frequency possible and put the resolution to 2^11 bits** 
+- **Put PWM in the max frequency possible and put the resolution to 2^11 bits** 
 
-*void initialize_song_engine(double timer_freq, TIM_HandleTypeDef* ctrl_tim);
-
-*void song_scheduler(TIM_HandleTypeDef* htim);
+  -*void initialize_song_engine(double timer_freq, TIM_HandleTypeDef* ctrl_tim);
+  -*void song_scheduler(TIM_HandleTypeDef* htim);
 
 
 
 II) After that, you can treat output with pwm or use a custom treatment output.
 
-*void set_pwm_output(TIM_HandleTypeDef* output_tim, uint8_t out_channel);
-
-*void set_custom_output_handler(void (*output_handler)(uint32_t));
+  -*void set_pwm_output(TIM_HandleTypeDef* output_tim, uint8_t out_channel);
+  -*void set_custom_output_handler(void (*output_handler)(uint32_t));
 
 
 
@@ -167,15 +165,11 @@ IV) Just play and have fun.
 
 You can use other functions to set/get the status of the song.
 
-*void clear_song(music musica);
-
-*void play_song();
-
-*void pause_song();
-
-*void stop_song();
-
-*song_status get_song_status();
+  -*void clear_song(music musica);
+  -*void play_song();
+  -*void pause_song();
+  -*void stop_song();
+  -*song_status get_song_status();
 
 
 
@@ -188,23 +182,15 @@ I) Set the pwm and timer necessaries, like the song_engine library. - You can us
 II) You can customize your sound with diferents sets like sin wave(setwave).
 But you have to set the function in **bold**.
 
-*void setWave(uint8_t voice, uint8_t wave);
-
-*void setPitch(uint8_t voice, uint8_t MIDInote);
-
-*void setEnvelope(uint8_t voice, uint8_t env);
-
-*void setLength(uint8_t voice, uint8_t length);
-
-*void setMod(uint8_t voice, uint16_t mod);
-
-*void mTrigger(uint8_t voice, uint8_t MIDInote);
-
-*void setFrequency(uint8_t voice, float f);
-
-*void setTime(uint8_t voice, float t);
-
-*void trigger(uint8_t voice);
+  -*void setWave(uint8_t voice, uint8_t wave);
+  -*void setPitch(uint8_t voice, uint8_t MIDInote);
+  -*void setEnvelope(uint8_t voice, uint8_t env);
+  -*void setLength(uint8_t voice, uint8_t length);
+  -*void setMod(uint8_t voice, uint16_t mod);
+  -*void mTrigger(uint8_t voice, uint8_t MIDInote);
+  -*void setFrequency(uint8_t voice, float f);
+  -*void setTime(uint8_t voice, float t);
+  -*void trigger(uint8_t voice);
 
 
 III) To set the 
