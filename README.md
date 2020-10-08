@@ -124,17 +124,28 @@ Read the article: https://www.gamry.com/application-notes/EIS/waveform-generatio
 
 This is the library that you will use, it cointains the functions to control music.
 
+
 I) You have to initialize the timer interruption (initialize_song_engine and song_scheduler), to make use the library.
+
 **ctrl_tim**: the timer that you will use.
+
 **timer_freq**: timer frequency.
+
 **htim**: interruption timer to know when a note ends - It is the same fo ctrl_tim.
+
+
 #### Timer and PWM configuration:
+
+
 **Your timer input frequency must has 20kHz**
+
 **Put PWM in the max frequency possible and put the resolution to 2^11 bits** 
 
 *void initialize_song_engine(double timer_freq, TIM_HandleTypeDef* ctrl_tim);
 
 *void song_scheduler(TIM_HandleTypeDef* htim);
+
+
 
 II) After that, you can treat output with pwm or use a custom treatment output.
 
@@ -142,9 +153,13 @@ II) After that, you can treat output with pwm or use a custom treatment output.
 
 *void set_custom_output_handler(void (*output_handler)(uint32_t));
 
+
+
 III) Set the music struct parameters and load the song. 
 
 *void load_song(music musica);
+
+
 
 IV) Just play and have fun.
 
@@ -159,6 +174,8 @@ You can use other functions to set/get the status of the song.
 *void stop_song();
 
 *song_status get_song_status();
+
+
 
 ### How to use polyphonic_tune:
 
