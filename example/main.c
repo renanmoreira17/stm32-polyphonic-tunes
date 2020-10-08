@@ -223,6 +223,7 @@ int main(void)
 	  };
 
 	  stop_song();
+	  //you could clear the song here using clear_song(). Then, you must load another song to play in its place
 
 //	HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 //	HAL_Delay(1000);
