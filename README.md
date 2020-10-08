@@ -4,6 +4,19 @@
 #### *- Prof. Ricardo de Oliveira Duarte – Departamento de Engenharia Eletrônica*
 
 
+## Hardware connections
+
+                         
+                       +10µF 
+ Output Pin ---[ 1k ]--+---||--->> Audio out
+                     
+                     |
+                     
+                   === 10nF
+                   
+                     |
+                     
+                    GND
 
 ## How to write song: 
 
@@ -99,9 +112,9 @@ The function will uptade duration, position, note and will return 1 when the str
 
 example: uint8_t violine_I; note_update(&song, violine_I);
 
-*song.control.note[violine_I] will be the number that represent c4 in the FTW table. 
+song.control.note[violine_I] will be the number that represent c4 in the FTW table. 
 
-*song.contol.duration[violine_I] will be the time -> 4(nota_ref)/8(time);
+song.contol.duration[violine_I] will be the time -> 4(nota_ref)/8(time);
 
 
 
@@ -143,21 +156,21 @@ I) You have to initialize the timer interruption (initialize_song_engine and son
 
 - **Put PWM in the max frequency possible and put the resolution to 2^11 bits** 
 
-  -*void initialize_song_engine(double timer_freq, TIM_HandleTypeDef* ctrl_tim);
-  -*void song_scheduler(TIM_HandleTypeDef* htim);
+  - void initialize_song_engine(double timer_freq, TIM_HandleTypeDef* ctrl_tim);
+  - void song_scheduler(TIM_HandleTypeDef* htim);
 
 
 
 II) After that, you can treat output with pwm or use a custom treatment output.
 
-  -*void set_pwm_output(TIM_HandleTypeDef* output_tim, uint8_t out_channel);
-  -*void set_custom_output_handler(void (*output_handler)(uint32_t));
+  - void set_pwm_output(TIM_HandleTypeDef* output_tim, uint8_t out_channel);
+  - void set_custom_output_handler(void (*output_handler)(uint32_t));
 
 
 
 III) Set the music struct parameters and load the song. 
 
-*void load_song(music musica);
+  - void load_song(music musica);
 
 
 
@@ -165,11 +178,15 @@ IV) Just play and have fun.
 
 You can use other functions to set/get the status of the song.
 
-  -*void clear_song(music musica);
-  -*void play_song();
-  -*void pause_song();
-  -*void stop_song();
-  -*song_status get_song_status();
+- void clear_song(music musica);
+
+- void play_song();
+
+- void pause_song();
+
+- void stop_song();
+
+- song_status get_song_status();
 
 
 
@@ -182,39 +199,34 @@ I) Set the pwm and timer necessaries, like the song_engine library. - You can us
 II) You can customize your sound with diferents sets like sin wave(setwave).
 But you have to set the function in **bold**.
 
-  -*void setWave(uint8_t voice, uint8_t wave);
-  -*void setPitch(uint8_t voice, uint8_t MIDInote);
-  -*void setEnvelope(uint8_t voice, uint8_t env);
-  -*void setLength(uint8_t voice, uint8_t length);
-  -*void setMod(uint8_t voice, uint16_t mod);
-  -*void mTrigger(uint8_t voice, uint8_t MIDInote);
-  -*void setFrequency(uint8_t voice, float f);
-  -*void setTime(uint8_t voice, float t);
-  -*void trigger(uint8_t voice);
+- void setWave(uint8_t voice, uint8_t wave);
+
+- void setPitch(uint8_t voice, uint8_t MIDInote);
+
+- void setEnvelope(uint8_t voice, uint8_t env);
+
+- void setLength(uint8_t voice, uint8_t length);
+
+- void setMod(uint8_t voice, uint16_t mod);
+
+- void mTrigger(uint8_t voice, uint8_t MIDInote);
+
+- void setFrequency(uint8_t voice, float f);
+
+- void setTime(uint8_t voice, float t);
+
+- void trigger(uint8_t voice);
 
 
-III) To set the 
+III) Set the voices
 
-void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
+- void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
 
+IV) Join the voices with synthesis
 
+- void audio_synthesis();
 
-void audio_synthesis();
-void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim);
-void setup_synth_custom_output_handler(void (*output_handler)(uint32_t));
-void setup_synth_pwm_output_handler(TIM_HandleTypeDef* output_tim, uint8_t out_channel);
-void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
-void setWave(uint8_t voice, uint8_t wave);
-void setPitch(uint8_t voice, uint8_t MIDInote);
-void setEnvelope(uint8_t voice, uint8_t env);
-void setLength(uint8_t voice, uint8_t length);
-void setMod(uint8_t voice, uint16_t mod);
-void mTrigger(uint8_t voice, uint8_t MIDInote);
-void setFrequency(uint8_t voice, float f);
-void setTime(uint8_t voice, float t);
-void trigger(uint8_t voice);
-
-void pause(uint8_t voice);
-
-void synth_suspend();
-void synth_resume();
+You can modifed the status with:
+- void pause(uint8_t voice);
+- void synth_suspend();
+- void synth_resume();
