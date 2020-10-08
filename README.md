@@ -1,5 +1,10 @@
 # stm32-polyphonic-tunes
 
+#### *Esta API foi desenvolvida como trabalho da disciplina de Programação de Sistemas Embarcados da UFMG*
+#### *- Prof. Ricardo de Oliveira Duarte – Departamento de Engenharia Eletrônica*
+
+
+
 ## How to write song: 
 
 You may be wondering how one can write songs for the stm32 without any knowledge of Music! Its actually quite interesting and fun. First you need to know the value of the notes in Music. 
@@ -23,7 +28,7 @@ Voices and control has an index to
 **ref note**: the note ()
 
 **voice**: music *string.*
-An example: *music.voices[0] = "4g1,8p,8d1,4g1,8p,8d1"*
+- example: *music.voices[0] = "4g1,8p,8d1,4g1,8p,8d1"*
 
 The control of the voice string is done through 5 parameters of the struct song_ctrl.
 
@@ -36,7 +41,7 @@ The control of the voice string is done through 5 parameters of the struct song_
 
 
 **Voice and control has voice reference indicators. It is extremely important to use the same indices for the same voices.**
-. example to reference the same voice:
+- example to reference the same voice:
 music.voice[*0*]; music.control.note[*0*]; music.control.note[*0*];
 
 #### Note request:
@@ -44,37 +49,26 @@ music.voice[*0*]; music.control.note[*0*]; music.control.note[*0*];
 
 ##### Time:
 - The duration of each note is made before the letter
-. ex: 4f is a quarter note
+  - ex: 4f is a quarter note
 - Put a period . for dotted notes
-. ex: 2.f is a dotted half note
+  -ex: 2.f is a dotted half note
 - The duration can be determined by this formula.
  **Formula: 4/(note value)= duration. So an eight note would be 4/(1/2) = 8.**
 
 ##### Note:
 
 - There are only 7 possible letters. a,b,c,d,e,f,g
-
 - A rest uses the letter p
-
 - To name a letter a flat put an underscore _ right after the letter
-
-. ex: b_
-
+  - ex: b_
 - To name a letter a sharp put a hashtag # right after the letter
-
-. ex: c#
-
+  - ex: c#
 - To raise a note up an octave, put the number of octaves to be raised after the Sharp/Flats/Letter
-
-. ex: b1
-
-. ex2: c#1
-
+  - ex: b1
+  - ex2: c#1
 - To drop a note down an Octave, put a minus - sign and then the number of octaves to be dropped after the Sharp/Flats/Letter
-
-. ex: b-1
-
-. ex: c#-2
+  - ex: b-1
+  - ex: c#-2
 
 #### Creating a Song:
 
@@ -89,6 +83,10 @@ song.ref_note = 4 // quarter_note
 
 song.voice = "8c,8d,8e,8f,8g,8a,8b,8c1"; // c-scale
 
+##### You must not :
+
+- Use spaces
+- Use diferents caracters 
 
 ## How to read a note
 
@@ -101,7 +99,11 @@ The function will uptade duration, position, note and will return 1 when the str
 
 example: uint8_t violine_I; note_update(&song, violine_I);
 
-song.control.note[violine_I] will be the number that represent c4 in the FTW table. song.contol.duration[violine_I] will be the time -> 4(nota_ref)/8(time);
+*song.control.note[violine_I] will be the number that represent c4 in the FTW table. 
+
+*song.contol.duration[violine_I] will be the time -> 4(nota_ref)/8(time);
+
+
 
 ## How to produce sound
 
