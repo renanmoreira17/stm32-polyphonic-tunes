@@ -190,10 +190,7 @@ III) Set the music struct parameters and load the song.
   - musica.nota_ref = QUARTER_NOTE;
   - musica.oitava = 4;
   - musica.voice[0] = <your_song_string>;.
-  - .
-  - .
-  - .
-
+  - ...
   - void load_song(music musica);
 
 
