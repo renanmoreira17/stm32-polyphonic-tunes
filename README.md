@@ -128,7 +128,7 @@ note_update(&song, violine_I);
 
 ## How to produce sound
 
-*The library polyphonic_tunes make it! 
+The library polyphonic_tunes make it! 
 
 First you have to understand how the code produce play diferent notes at the same time.
 Basicly it sums diferrent sin waves at the same time.
