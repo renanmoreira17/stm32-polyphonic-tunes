@@ -107,10 +107,17 @@ uint8_t update_note (volatile music* musica, uint8_t instrument){
 
     }
 
-    if(bmol == '_') musica->control.note[instrument] += -1;
-    if(sustenido == '#') musica->control.note[instrument] += +1;
-    if(oitava != '\0')musica->control.note[instrument] += 12*(atoi(oitava));
-    musica->control.note[instrument] += 12*musica->oitava;
+    if (musica->control.note[instrument] != 0) {
+		if(bmol == '_')
+			musica->control.note[instrument] += -1;
+		if(sustenido == '#')
+			musica->control.note[instrument] += +1;
+		if(oitava[0] != '\0')
+			musica->control.note[instrument] += 12*(atoi(oitava));
+		musica->control.note[instrument] += 12*(musica->oitava-1);
+
+    }
+
 
     if (p[musica->control.posicao[instrument]] == ','){
         musica->control.posicao[instrument]++;

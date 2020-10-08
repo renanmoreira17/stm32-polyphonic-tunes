@@ -194,7 +194,8 @@ void setPitch(uint8_t voice, uint8_t MIDInote)
 
 
 void pause(uint8_t voice) {
-	PITCH[voice] = 0;
+	EPCW[voice]= 0;
+	PITCH[voice] = PITCHS[0];
 }
 
 //*********************************************************************
