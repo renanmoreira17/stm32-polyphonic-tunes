@@ -165,6 +165,8 @@ I) You have to initialize the timer interruption (initialize_song_engine and son
 - **Put PWM in the max frequency possible and put the resolution to 2^11 bits** 
 
   - void initialize_song_engine(double timer_freq, TIM_HandleTypeDef* ctrl_tim);
+  
+- **You MUST call this function inside your 20kHz timer callback, and pass the associated timer instance with it. You must implement the callback if you haven't done so.** 
   - void song_scheduler(TIM_HandleTypeDef* htim);
 
 
@@ -230,7 +232,7 @@ III) Set the voices
 
 - void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
 
-IV) Join the voices with synthesis
+IV) Join the voices with synthesis. You must call this function inside your time callback, as you did in song_engine
 
 - void audio_synthesis();
 
