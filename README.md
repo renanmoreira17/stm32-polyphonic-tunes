@@ -4,6 +4,19 @@
 #### *- Prof. Ricardo de Oliveira Duarte – Departamento de Engenharia Eletrônica*
 
 
+## Hardware connections
+
+                         
+                       +10µF 
+ Output Pin ---[ 1k ]--+---||--->> Audio out
+                     
+                     |
+                     
+                   === 10nF
+                   
+                     |
+                     
+                    GND
 
 ## How to write song: 
 
