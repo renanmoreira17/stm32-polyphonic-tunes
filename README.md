@@ -3,6 +3,9 @@
 #### *Esta API foi desenvolvida como trabalho da disciplina de Programação de Sistemas Embarcados da UFMG*
 #### *- Prof. Ricardo de Oliveira Duarte – Departamento de Engenharia Eletrônica*
 
+# Important!
+
+This library is importing the HAL library from stm32H7xx, you should change it to match your stm model. Access the library source files and change it. 
 
 ## Hardware connections
 
