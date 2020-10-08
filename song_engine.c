@@ -179,12 +179,13 @@ void initialize_song_engine(double timer_freq, TIM_HandleTypeDef* ctrl_tim) {
 
 void load_song(music musica) {
 	current_song = musica;
+	memset((uint16_t*)&current_song.control.posicao, 0, sizeof(current_song.control.posicao)*4);
+
 	for (uint8_t i = 0; i < 4; i++) {
 //		update_note(&musica, i);
 		voice_update(i);
 	}
 
-	memset((uint16_t*)&current_song.control.posicao, 0, sizeof(current_song.control.posicao)*4);
 }
 
 void clear_song(music musica) {
