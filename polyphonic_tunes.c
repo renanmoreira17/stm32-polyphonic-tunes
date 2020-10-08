@@ -68,7 +68,7 @@ void audio_synthesis() {
 	//-------------------------------
 	//  Synthesizer/audio mixer
 	//-------------------------------
-	uint32_t synthesized_output = 0; //half of an int16 max value
+	uint32_t synthesized_output = 0;
 
 	for(int i = 0; i < 4; i++) {
 		PCW[i]+=FTW[i];
@@ -177,18 +177,6 @@ void setWave(uint8_t voice, uint8_t wave)
 	{
 	case TRIANGLE:
 	  wavs[voice] = TriangleTable;
-	  break;
-	case SQUARE:
-	  wavs[voice] = SquareTable;
-	  break;
-	case SAW:
-	  wavs[voice] = SawTable;
-	  break;
-	case RAMP:
-	  wavs[voice] = RampTable;
-	  break;
-	case NOISE:
-	  wavs[voice] = NoiseTable;
 	  break;
 	default:
 	  wavs[voice] = SinTable;
