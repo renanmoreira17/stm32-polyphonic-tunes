@@ -7,7 +7,7 @@
 
 
 #include "polyphonic_tunes.h"
-#include "polyphonic-tunes-tables.h"
+#include "polyphonic_tunes_tables.h"
 
 #define SET(x,y) (x |=(1<<y))		        		//-Bit set/clear macros
 #define CLR(x,y) (x &= (~(1<<y)))       			// |
@@ -19,8 +19,8 @@ volatile uint16_t FTW[4] = {1000, 200, 300, 400};           //-Wave frequency tu
 volatile uint8_t AMP[4] = {255, 255, 255, 255};           //-Wave amplitudes [0-255]
 volatile uint16_t PITCH[4] = {500, 500, 500, 500};          //-Voice pitch
 volatile int16_t MOD[4] = {20, 0, 64, 127};                         //-Voice envelope modulation [0-1023 512=no mod. <512 pitch down >512 pitch up]
-volatile uint16_t* wavs[4];                                  //-Wave table selector [address of wave in memory]
-volatile uint16_t* envs[4];                                  //-Envelopte selector [address of envelope in memory]
+volatile const uint16_t* wavs[4];                                  //-Wave table selector [address of wave in memory]
+volatile const uint16_t* envs[4];                                  //-Envelopte selector [address of envelope in memory]
 volatile uint16_t EPCW[4] = {0x8000, 0x8000, 0x8000, 0x8000}; //-Envelope phase accumolator
 volatile uint16_t EFTW[4] = {10, 10, 10, 10};               //-Envelope speed tuning word
 volatile uint8_t divider = 4;                             //-Sample rate decimator for envelope
@@ -91,16 +91,16 @@ void audio_synthesis() {
 
 void timer_output_handler(uint32_t output) {
 	switch (output_channel) {
-		case 1:
+		case TIM_CHANNEL_1:
 			tim_audio_out->Instance->CCR1 = output;
 			break;
-		case 2:
+		case TIM_CHANNEL_2:
 			tim_audio_out->Instance->CCR2 = output;
 			break;
-		case 3:
+		case TIM_CHANNEL_3:
 			tim_audio_out->Instance->CCR3 = output;
 			break;
-		case 4:
+		case TIM_CHANNEL_4:
 			tim_audio_out->Instance->CCR4 = output;
 			break;
 		default:
@@ -109,22 +109,23 @@ void timer_output_handler(uint32_t output) {
 }
 
 
-void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim, TIM_HandleTypeDef* output_tim, uint8_t out_channel, void (*output_handler)(uint32_t))
+void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim)
 {
 	timer_bus_freq = timer_frequency;
 
 	tim_control = ctrl_tim;
 
-	tim_audio_out = output_tim;
-	output_channel = out_channel;
-
-	if (output_handler != NULL)
-		output_func = output_handler;
-	else
-		output_func = timer_output_handler;
-
 }
 
+void setup_synth_custom_output_handler(void (*output_handler)(uint32_t)) {
+	output_func = output_handler;
+}
+
+void setup_synth_pwm_output_handler(TIM_HandleTypeDef* output_tim, uint8_t out_channel) {
+	tim_audio_out = output_tim;
+	output_channel = out_channel;
+	output_func = timer_output_handler;
+}
 
 
 //*********************************************************************
@@ -198,6 +199,11 @@ void setWave(uint8_t voice, uint8_t wave)
 void setPitch(uint8_t voice, uint8_t MIDInote)
 {
 	PITCH[voice]=PITCHS[MIDInote];
+}
+
+
+void pause(uint8_t voice) {
+	PITCH[voice] = 0;
 }
 
 //*********************************************************************
@@ -289,16 +295,17 @@ void trigger(uint8_t voice)
 //  Suspend/resume synth
 //*********************************************************************
 
-void suspend()
+void synth_suspend()
 {
-
-	HAL_TIM_Base_Stop(tim_control);
-	HAL_TIM_Base_Stop_IT(tim_control);
+	tim_control->Instance->CR1 &= ~TIM_CR1_CEN;
+//	HAL_TIM_Base_Stop(tim_control);
+//	HAL_TIM_Base_Stop_IT(tim_control);
 }
-void resume()
+void synth_resume()
 {
-	HAL_TIM_Base_Start(tim_control);
-	HAL_TIM_Base_Start_IT(tim_control);                           //-Start audio interrupt
+	tim_control->Instance->CR1 |= TIM_CR1_CEN;
+//	HAL_TIM_Base_Start(tim_control);
+//	HAL_TIM_Base_Start_IT(tim_control);                           //-Start audio interrupt
 }
 
 

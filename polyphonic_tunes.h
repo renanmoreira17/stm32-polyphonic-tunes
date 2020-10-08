@@ -27,7 +27,9 @@
 
 
 void audio_synthesis();
-void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim, TIM_HandleTypeDef* output_tim, uint8_t out_channel, void (*output_handler)(uint32_t));
+void setup_synth_engine(double timer_frequency, TIM_HandleTypeDef* ctrl_tim);
+void setup_synth_custom_output_handler(void (*output_handler)(uint32_t));
+void setup_synth_pwm_output_handler(TIM_HandleTypeDef* output_tim, uint8_t out_channel);
 void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
 void setWave(uint8_t voice, uint8_t wave);
 void setPitch(uint8_t voice, uint8_t MIDInote);
@@ -38,6 +40,11 @@ void mTrigger(uint8_t voice, uint8_t MIDInote);
 void setFrequency(uint8_t voice, float f);
 void setTime(uint8_t voice, float t);
 void trigger(uint8_t voice);
+
+void pause(uint8_t voice);
+
+void synth_suspend();
+void synth_resume();
 
 
 #endif /* INC_POLYPHONIC_TUNES_H_ */
