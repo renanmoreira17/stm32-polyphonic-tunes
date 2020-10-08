@@ -3,6 +3,9 @@
 #### *Esta API foi desenvolvida como trabalho da disciplina de Programação de Sistemas Embarcados da UFMG*
 #### *- Prof. Ricardo de Oliveira Duarte – Departamento de Engenharia Eletrônica*
 
+# Important!
+
+This library is importing the HAL library from stm32H7xx, you should change it to match your stm model. Access the library source files and change it. 
 
 ## Hardware connections
 
@@ -69,7 +72,7 @@ The control of the voice string is done through 5 parameters of the struct song_
 - Put a period . for dotted notes
   - ex: 2.f is a dotted half note
 - The duration can be determined by this formula.
- **Formula: (ref_note)/(note value)= duration. So an eight note would be 4/(1/2) = 8.**
+ **Formula: (ref_note)/(note value)= duration. So an eighth note would be 4/8 = 1/2.**
 
 ##### Note:
 
