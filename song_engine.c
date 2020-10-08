@@ -197,7 +197,7 @@ void load_song(music musica) {
 
 }
 
-void clear_song(music musica) {
+void clear_song() {
 	memset((music*)&current_song, 0, sizeof(music));
 }
 

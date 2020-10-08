@@ -56,7 +56,7 @@ void initialize_song_engine(double timer_freq, TIM_HandleTypeDef* ctrl_tim);
 //Load the song into memory
 void load_song(music musica);
 //Clear the song
-void clear_song(music musica);
+void clear_song();
 //Use default PWM output, must provide a PWM configured timer with its channel
 void set_pwm_output(TIM_HandleTypeDef* output_tim, uint8_t out_channel);
 //If you want to use a different output method other than PWM, provide your own function
