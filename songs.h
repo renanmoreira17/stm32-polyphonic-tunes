@@ -1,6 +1,6 @@
 /*
  * songs.h
- *
+ *	Universidade Federal de Minas Gerais
  *  Created on: Oct 7, 2020
  *      Author: Renan Moreira, Rodolfo Lessa
  *     Version: 1.0

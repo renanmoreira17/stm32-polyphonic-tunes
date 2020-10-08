@@ -1,6 +1,6 @@
 /*
  * song_engine.c
- *
+ *	Universidade Federal de Minas Gerais
  *  Created on: Oct 7, 2020
  *      Author: Renan Moreira, Rodolfo Lessa
  *     Version: 1.0
@@ -218,9 +218,15 @@ void pause_song() {
 }
 
 void stop_song() {
-	//setar indices do rodolfo para 0
-
 	synth_suspend();
+
+	memset((uint16_t*)&current_song.control.posicao, 0, sizeof(current_song.control.posicao)*4);
+
+	for (uint8_t i = 0; i < 4; i++) {
+	//		update_note(&musica, i);
+		voice_update(i);
+	}
+
 	current_status = STOPPED;
 
 }

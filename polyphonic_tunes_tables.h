@@ -1,6 +1,6 @@
 /*
  * polyphonic-tunes-tables.h
- *
+ *	Universidade Federal de Minas Gerais
  *  Created on: Oct 5, 2020
  *      Author: Renan Moreira, Rodolfo Lessa
  *     Version: 1.0
