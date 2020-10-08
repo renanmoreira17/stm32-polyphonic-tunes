@@ -66,7 +66,7 @@ const char* violino1 =
 8f#1,8c#1,8d1,8e1,8f#1,8f#1,8g1,16f#1,16g1,\
 8a1,8a1,8a#1,16g#1,16a#1,4b1,4p,\
 4.b,8d1,8d1,8c#1,8b,8a,\
-8d1,8p,8f#1,8p,8d1,8p,4p;";
+8d1,8p,8f#1,8p,8d1,8p,4p";
 
 const char* violino2 =
 "4g1,8p,8d1,4g1,8p,8d1,\
@@ -123,7 +123,7 @@ const char* violino2 =
 8f#1,8c#1,8d1,8e1,8f#1,8f#1,8g1,16f#1,16g1,\
 8a1,8a1,8a#1,16g#1,16a#1,4b1,4p,\
 1g,\
-8f#,8p,8a,8p,8f#,8p,4p;";
+8f#,8p,8a,8p,8f#,8p,4p";
 
 const char* cello =
 "4g-1,8p,8d-1,4g-1,8p,8d-1,\
@@ -180,7 +180,7 @@ const char* cello =
 8f#-1,8c#-1,8d-1,8e-1,8f#-1,8f#-1,8g-1,8g-1,\
 8a-1,8a-1,8a#-1,8a#-1,4b-1,4p,\
 2g-1,2a-1,\
-8d-1,8p,8d-1,8p,8d-1,8p,4p;";
+8d-1,8p,8d-1,8p,8d-1,8p,4p";
 
 const char* viola =
 "4g,8p,8d,4g,8p,8d,\
@@ -236,7 +236,7 @@ const char* viola =
 8f#,8c#,8d,8e,8f#,8f#,8g,8g,\
 8a,8a,8a#,8a#,4b,4p,\
 2.e,8d,8c#,\
-8d,8p,8d,8p,8d,8p,4p;";
+8d,8p,8d,8p,8d,8p,4p";
 
 
 #endif /* POLYPHONIC_TUNES_LIB_SONGS_H_ */
