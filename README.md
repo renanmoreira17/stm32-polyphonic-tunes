@@ -22,6 +22,8 @@
 
 You may be wondering how one can write songs for the stm32 without any knowledge of Music! Its actually quite interesting and fun. First you need to know the value of the notes in Music. 
 
+![alt text](https://lh3.googleusercontent.com/proxy/14r8O6HwR5brg3J6wkm-n_To6zeHLZB4NYLGDut-vAvWiy9ThKSZgXc-cgZFelgwnJNpaGx0N3o3rPfhI0D5kC5FCgTrcOc8eOZOWPJ59f1bdCLnIw-_emWDQtB4gDhNRk1SF9ryGhKeUAoqk-2c6U_PdYc)
+
 The API only can play 4 voices together.
 
 ### The stm32 Code:
@@ -29,7 +31,6 @@ The API only can play 4 voices together.
 #### Struct **music**
 
 Formed by 5 parameters: octave, bpm, control, voices and nota ref. 
-Voices and control has an index to 
 
 ##### The octave, the bpm and the ref note are fixed parameters of the music.
 
@@ -55,7 +56,9 @@ The control of the voice string is done through 5 parameters of the struct song_
 
 **Voice and control has voice reference indicators. It is extremely important to use the same indices for the same voices.**
 - example to reference the same voice:
-music.voice[*0*]; music.control.note[*0*]; music.control.note[*0*];
+  - music.voice[*0*]; 
+  - music.control.note[*0*]; 
+  - music.control.note[*0*];
 
 #### Note request:
 ##### The song's notes are made after the second semicolon.
@@ -64,9 +67,9 @@ music.voice[*0*]; music.control.note[*0*]; music.control.note[*0*];
 - The duration of each note is made before the letter
   - ex: 4f is a quarter note
 - Put a period . for dotted notes
-  -ex: 2.f is a dotted half note
+  - ex: 2.f is a dotted half note
 - The duration can be determined by this formula.
- **Formula: 4/(note value)= duration. So an eight note would be 4/(1/2) = 8.**
+ **Formula: (ref_note)/(note value)= duration. So an eight note would be 4/(1/2) = 8.**
 
 ##### Note:
 
@@ -86,15 +89,16 @@ music.voice[*0*]; music.control.note[*0*]; music.control.note[*0*];
 #### Creating a Song:
 
 
-music song;
+- music song;
 
-song.octave = 4. // reference in middle c (c4)
+- song.octave = 4. // reference in middle c (c4)
 
-song.bpm = 100; 
+- song.bpm = 100; 
 
-song.ref_note = 4 // quarter_note
+- song.ref_note = 4 // quarter_note
 
-song.voice = "8c,8d,8e,8f,8g,8a,8b,8c1"; // c-scale
+- song.voice = "8c,8d,8e,8f,8g,8a,8b,8c1"; // c-scale
+
 
 ##### You must not :
 
@@ -110,17 +114,21 @@ instrument represent the voice of the score. Usually in classical music, they ha
 
 The function will uptade duration, position, note and will return 1 when the string have more notes to read. If not, return 0. The function return it to other the programmer know when the music it is over.
 
-example: uint8_t violine_I; note_update(&song, violine_I);
+example of an internal use:
 
-song.control.note[violine_I] will be the number that represent c4 in the FTW table. 
+uint8_t violine_I; 
 
-song.contol.duration[violine_I] will be the time -> 4(nota_ref)/8(time);
+note_update(&song, violine_I);
+
+- song.control.note[violine_I] will be the number that represent c4 in the FTW table. 
+
+- song.contol.duration[violine_I] will be the time -> 4(nota_ref)/8(time);
 
 
 
 ## How to produce sound
 
-*The library polyphonic_tunes make it! 
+The library polyphonic_tunes make it! 
 
 First you have to understand how the code produce play diferent notes at the same time.
 Basicly it sums diferrent sin waves at the same time.
@@ -157,6 +165,8 @@ I) You have to initialize the timer interruption (initialize_song_engine and son
 - **Put PWM in the max frequency possible and put the resolution to 2^11 bits** 
 
   - void initialize_song_engine(double timer_freq, TIM_HandleTypeDef* ctrl_tim);
+  
+- **You MUST call this function inside your 20kHz timer callback, and pass the associated timer instance with it. You must implement the callback if you haven't done so.** 
   - void song_scheduler(TIM_HandleTypeDef* htim);
 
 
@@ -222,7 +232,7 @@ III) Set the voices
 
 - void setupVoice(uint8_t voice, uint8_t wave, uint8_t pitch, uint8_t env, uint8_t length, uint16_t mod);
 
-IV) Join the voices with synthesis
+IV) Join the voices with synthesis. You must call this function inside your time callback, as you did in song_engine
 
 - void audio_synthesis();
 
