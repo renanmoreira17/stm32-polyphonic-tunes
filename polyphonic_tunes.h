@@ -2,7 +2,9 @@
  * polyphonic-tunes.h
  *
  *  Created on: Oct 5, 2020
- *      Author: renanmoreira
+ *      Author: Renan Moreira, Rodolfo Lessa
+ *     Version: 1.0
+ *     License: GPLv3.0
  */
 
 #ifndef INC_POLYPHONIC_TUNES_H_

@@ -2,7 +2,9 @@
  * song_engine.h
  *
  *  Created on: Oct 7, 2020
- *      Author: renanmoreira
+ *      Author: Renan Moreira, Rodolfo Lessa
+ *     Version: 1.0
+ *     License: GPLv3.0
  */
 
 #ifndef POLYPHONIC_TUNES_LIB_SONG_ENGINE_H_

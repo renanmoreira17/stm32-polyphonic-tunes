@@ -2,7 +2,9 @@
  * song_engine.c
  *
  *  Created on: Oct 7, 2020
- *      Author: renanmoreira
+ *      Author: Renan Moreira, Rodolfo Lessa
+ *     Version: 1.0
+ *     License: GPLv3.0
  */
 
 #include "song_engine.h"
