@@ -22,6 +22,8 @@
 
 You may be wondering how one can write songs for the stm32 without any knowledge of Music! Its actually quite interesting and fun. First you need to know the value of the notes in Music. 
 
+![alt text](https://lh3.googleusercontent.com/proxy/14r8O6HwR5brg3J6wkm-n_To6zeHLZB4NYLGDut-vAvWiy9ThKSZgXc-cgZFelgwnJNpaGx0N3o3rPfhI0D5kC5FCgTrcOc8eOZOWPJ59f1bdCLnIw-_emWDQtB4gDhNRk1SF9ryGhKeUAoqk-2c6U_PdYc)
+
 The API only can play 4 voices together.
 
 ### The stm32 Code:
@@ -29,7 +31,6 @@ The API only can play 4 voices together.
 #### Struct **music**
 
 Formed by 5 parameters: octave, bpm, control, voices and nota ref. 
-Voices and control has an index to 
 
 ##### The octave, the bpm and the ref note are fixed parameters of the music.
 
@@ -55,7 +56,9 @@ The control of the voice string is done through 5 parameters of the struct song_
 
 **Voice and control has voice reference indicators. It is extremely important to use the same indices for the same voices.**
 - example to reference the same voice:
-music.voice[*0*]; music.control.note[*0*]; music.control.note[*0*];
+  - music.voice[*0*]; 
+  - music.control.note[*0*]; 
+  - music.control.note[*0*];
 
 #### Note request:
 ##### The song's notes are made after the second semicolon.
@@ -64,7 +67,7 @@ music.voice[*0*]; music.control.note[*0*]; music.control.note[*0*];
 - The duration of each note is made before the letter
   - ex: 4f is a quarter note
 - Put a period . for dotted notes
-  -ex: 2.f is a dotted half note
+  - ex: 2.f is a dotted half note
 - The duration can be determined by this formula.
  **Formula: 4/(note value)= duration. So an eight note would be 4/(1/2) = 8.**
 
@@ -86,15 +89,16 @@ music.voice[*0*]; music.control.note[*0*]; music.control.note[*0*];
 #### Creating a Song:
 
 
-music song;
+- music song;
 
-song.octave = 4. // reference in middle c (c4)
+- song.octave = 4. // reference in middle c (c4)
 
-song.bpm = 100; 
+- song.bpm = 100; 
 
-song.ref_note = 4 // quarter_note
+- song.ref_note = 4 // quarter_note
 
-song.voice = "8c,8d,8e,8f,8g,8a,8b,8c1"; // c-scale
+- song.voice = "8c,8d,8e,8f,8g,8a,8b,8c1"; // c-scale
+
 
 ##### You must not :
 
