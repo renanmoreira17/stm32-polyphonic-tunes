@@ -69,7 +69,7 @@ The control of the voice string is done through 5 parameters of the struct song_
 - Put a period . for dotted notes
   - ex: 2.f is a dotted half note
 - The duration can be determined by this formula.
- **Formula: 4/(note value)= duration. So an eight note would be 4/(1/2) = 8.**
+ **Formula: (ref_note)/(note value)= duration. So an eight note would be 4/(1/2) = 8.**
 
 ##### Note:
 
@@ -114,11 +114,15 @@ instrument represent the voice of the score. Usually in classical music, they ha
 
 The function will uptade duration, position, note and will return 1 when the string have more notes to read. If not, return 0. The function return it to other the programmer know when the music it is over.
 
-example: uint8_t violine_I; note_update(&song, violine_I);
+example of an internal use:
 
-song.control.note[violine_I] will be the number that represent c4 in the FTW table. 
+uint8_t violine_I; 
 
-song.contol.duration[violine_I] will be the time -> 4(nota_ref)/8(time);
+note_update(&song, violine_I);
+
+- song.control.note[violine_I] will be the number that represent c4 in the FTW table. 
+
+- song.contol.duration[violine_I] will be the time -> 4(nota_ref)/8(time);
 
 
 
